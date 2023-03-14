@@ -13,7 +13,7 @@ db.connect(function (err) {
     list();
 });
 
-function list() {
+const list = () => {
     inquirer
         .prompt([
             {
@@ -23,7 +23,7 @@ function list() {
                 choices: ['View all Departments', 'View all Roles', 'View all Employees', 'Add Department', 'Add Role', 'Add Employee', 'Update Employee Roll']
             }]).then(response => {
                 if (response.choice === 'View all Departments') {
-                    //viewDepartments()
+                    viewDepartments()
                 }
                 else if (response.choice === 'View all Roles') {
                     //viewRoles()
@@ -44,4 +44,14 @@ function list() {
                     //updateEmployeeRole()
                 }
             })
+}
+
+const allDepartments = () => {
+    const query = `SELECT * FROM department`;
+    db.query(query,
+        function (err, res) {
+            if (err) throw err
+            console.table(res)
+            list()
+        })
 }
