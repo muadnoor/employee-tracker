@@ -29,7 +29,7 @@ const list = () => {
                     viewRoles()
                 }
                 else if (response.choice === 'View all Employees') {
-                    //viewEmployees()
+                    viewEmployees()
                 }
                 else if (response.choice === 'Add Department') {
                     //addDepartment()
@@ -46,7 +46,7 @@ const list = () => {
             })
 }
 
-const allDepartments = () => {
+const viewDepartments = () => {
     const query = `SELECT * FROM department`;
     db.query(query,
         function (err, res) {
@@ -56,8 +56,18 @@ const allDepartments = () => {
         })
 }
 
-const allRoles = () => {
+const viewRoles = () => {
     const query = `SELECT * FROM roles`;
+    db.query(query,
+        function (err, res) {
+            if (err) throw err
+            console.table(res)
+            list()
+        })
+}
+
+const viewEmployees = () => {
+    const query = `SELECT * FROM employee`;
     db.query(query,
         function (err, res) {
             if (err) throw err
