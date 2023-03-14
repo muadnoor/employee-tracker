@@ -61,14 +61,14 @@ const addDepartment = () => {
         .prompt([
             {
                 type: 'input',
-                name: 'departmentName',
+                name: 'department',
                 message: 'What is the name of the department?'
             }
         ]).then(response => {
             const query = `INSERT INTO department SET ?`
             db.query(
                 query, {
-                department_name: response.departmentName
+                department_name: response.department
             }
             )
             list()
@@ -90,7 +90,7 @@ const addRole = () => {
         .prompt([
             {
                 type: 'input',
-                name: 'roleName',
+                name: 'role',
                 message: 'What is the name of the role?'
             },
             {
@@ -100,16 +100,16 @@ const addRole = () => {
             },
             {
                 type: 'input',
-                name: 'roleDepartment',
+                name: 'departmentId',
                 message: 'Which department does the role belong to?'
             },
         ]).then(response => {
             const query = `INSERT INTO roles SET ?`
             db.query(
                 query, {
-                title: response.roleName,
+                title: response.role,
                 salary: response.salary,
-                department_id: response.roleDepartment
+                department_id: response.departmentId
             }
             )
             list()
@@ -131,32 +131,32 @@ const addEmployee = () => {
         .prompt([
             {
                 type: 'input',
-                name: 'firstName',
+                name: 'first',
                 message: "What is the employee's first name?"
             },
             {
                 type: 'input',
-                name: 'lastName',
+                name: 'last',
                 message: "What is the employee's last name?"
             },
             {
                 type: 'input',
-                name: 'employeeRole',
+                name: 'roleId',
                 message: "What is the employee's role id?"
             },
             {
                 type: 'input',
-                name: 'manager',
+                name: 'managerId',
                 message: "What is the employee's manager id?"
             },
         ]).then(response => {
             const query = `INSERT INTO employee SET ?`
             db.query(
                 query, {
-                first_name: response.firstName,
-                last_name: response.lastName,
-                role_id: response.employeeRole,
-                manager_id: response.manager
+                first_name: response.first,
+                last_name: response.last,
+                role_id: response.roleId,
+                manager_id: response.managerId
             }
             )
             list()
@@ -167,9 +167,7 @@ const updateEmployeeRole = () => {
     const employeeSql = `SELECT * FROM employee`;
     db.query(employeeSql, (err, data) => {
         if (err) throw err;
-
         const employees = data.map(({ id, first_name, last_name }) => ({ name: first_name + " " + last_name, value: id }));
-
         inquirer.prompt([
             {
                 type: 'list',
@@ -182,14 +180,10 @@ const updateEmployeeRole = () => {
                 const employee = empChoice.name;
                 const params = [];
                 params.push(employee);
-
                 const roleSql = `SELECT * FROM roles`;
-
                 db.query(roleSql, (err, data) => {
                     if (err) throw err;
-
                     const roles = data.map(({ id, title }) => ({ name: title, value: id }));
-
                     inquirer.prompt([
                         {
                             type: 'list',
@@ -201,17 +195,12 @@ const updateEmployeeRole = () => {
                         .then(roleChoice => {
                             const role = roleChoice.role;
                             params.push(role);
-
                             let employee = params[0]
                             params[0] = role
                             params[1] = employee
-
                             const sql = `UPDATE employee SET role_id = ? WHERE id = ?`;
-
                             db.query(sql, params, (err, result) => {
                                 if (err) throw err;
-                             
-
                                 list();
                             });
                         });
