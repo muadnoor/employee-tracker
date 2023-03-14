@@ -56,6 +56,25 @@ const viewDepartments = () => {
         })
 }
 
+const addDepartment = () => {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'departmentName',
+                message: 'What is the name of the department?'
+            }
+        ]).then(response => {
+            const query = `INSERT INTO department SET ?`
+            db.query(
+                query, {
+                department_name: response.departmentName
+            }
+            )
+            list()
+        })
+}
+
 const viewRoles = () => {
     const query = `SELECT * FROM roles`;
     db.query(query,
