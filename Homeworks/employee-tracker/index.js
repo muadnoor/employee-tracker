@@ -38,7 +38,7 @@ const list = () => {
                     addRole()
                 }
                 else if (response.choice === 'Add Employee') {
-                    //addEmployee()
+                    addEmployee()
                 }
                 else if (response.choice === 'Update Employee Role') {
                     //updateEmployeeRole()
@@ -122,6 +122,43 @@ const viewEmployees = () => {
         function (err, res) {
             if (err) throw err
             console.table(res)
+            list()
+        })
+}
+
+const addEmployee = () => {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'firstName',
+                message: "What is the employee's first name?"
+            },
+            {
+                type: 'input',
+                name: 'lastName',
+                message: "What is the employee's last name?"
+            },
+            {
+                type: 'input',
+                name: 'employeeRole',
+                message: "What is the employee's role id?"
+            },
+            {
+                type: 'input',
+                name: 'manager',
+                message: "What is the employee's manager id?"
+            },
+        ]).then(response => {
+            const query = `INSERT INTO employee SET ?`
+            db.query(
+                query, {
+                first_name: response.firstName,
+                last_name: response.lastName,
+                role_id: response.employeeRole,
+                manager_id: response.manager
+            }
+            )
             list()
         })
 }
