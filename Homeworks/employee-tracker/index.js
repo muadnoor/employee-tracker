@@ -32,10 +32,10 @@ const list = () => {
                     viewEmployees()
                 }
                 else if (response.choice === 'Add Department') {
-                    //addDepartment()
+                    addDepartment()
                 }
                 else if (response.choice === 'Add Role') {
-                    //addRole()
+                    addRole()
                 }
                 else if (response.choice === 'Add Employee') {
                     //addEmployee()
@@ -81,6 +81,37 @@ const viewRoles = () => {
         function (err, res) {
             if (err) throw err
             console.table(res)
+            list()
+        })
+}
+
+const addRole = () => {
+    inquirer
+        .prompt([
+            {
+                type: 'input',
+                name: 'roleName',
+                message: 'What is the name of the role?'
+            },
+            {
+                type: 'input',
+                name: 'salary',
+                message: 'What is the salary of the role?'
+            },
+            {
+                type: 'input',
+                name: 'roleDepartment',
+                message: 'Which department does the role belong to?'
+            },
+        ]).then(response => {
+            const query = `INSERT INTO roles SET ?`
+            db.query(
+                query, {
+                title: response.roleName,
+                salary: response.salary,
+                department_id: response.roleDepartment
+            }
+            )
             list()
         })
 }
